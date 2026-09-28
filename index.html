@@ -1,1231 +1,2735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DECLASSIFIED — Fantasy Big Brother 28</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DECLASSIFIED | Fantasy Big Brother 28</title>
 
 <style>
-  :root {
-    --bg: #080b10;
-    --panel: #111722;
-    --panel2: #171f2d;
-    --line: #2a3548;
-    --text: #f4f7fb;
-    --muted: #8f9bad;
-    --accent: #d6b85a;
-    --accent2: #f4dc86;
-    --correct: #28a86b;
-    --correct-dark: #174f38;
-    --wrong: #a63d4a;
-    --slot: #0c1119;
-    --tile: #222c3d;
-  }
 
-  * {
+:root {
+    --bg: #07090d;
+    --panel: #10141c;
+    --panel-light: #171d28;
+    --line: #303846;
+
+    --text: #f4f5f7;
+    --muted: #929baa;
+
+    --hero: #1677d2;
+    --hero-dark: #0c3155;
+    --hero-glow: rgba(22,119,210,.28);
+
+    --villain: #cf263d;
+    --villain-dark: #55141d;
+    --villain-glow: rgba(207,38,61,.28);
+
+    --gold: #d8b65a;
+    --gold-light: #f3da8d;
+
+    --correct: #209b62;
+    --correct-dark: #123e2d;
+
+    --incorrect: #9e3442;
+    --slot: #090c11;
+}
+
+* {
     box-sizing: border-box;
-  }
+}
 
-  body {
+html {
+    scroll-behavior: smooth;
+}
+
+body {
     margin: 0;
-    background:
-      radial-gradient(circle at top, #182235 0, #080b10 42%, #05070a 100%);
+    min-height: 100vh;
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
-    min-height: 100vh;
-  }
 
-  header {
-    text-align: center;
-    padding: 34px 20px 22px;
-    border-bottom: 1px solid var(--line);
-  }
+    background:
+        linear-gradient(
+            90deg,
+            rgba(12,49,85,.22) 0%,
+            rgba(7,9,13,0) 35%,
+            rgba(7,9,13,0) 65%,
+            rgba(85,20,29,.22) 100%
+        ),
+        radial-gradient(
+            circle at top,
+            #18202c 0%,
+            #090c11 42%,
+            #050608 100%
+        );
 
-  .eyebrow {
-    font-size: 12px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 700;
-  }
+    background-attachment: fixed;
+}
 
-  h1 {
-    margin: 8px 0 4px;
-    font-size: clamp(36px, 7vw, 72px);
-    letter-spacing: 7px;
-    line-height: 1;
-  }
 
-  .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    letter-spacing: 1px;
-  }
+/* ======================================================
+   HEADER
+====================================================== */
 
-  .controls {
-    max-width: 1500px;
-    margin: 20px auto 0;
-    padding: 0 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    appearance: none;
-    border: 1px solid var(--line);
-    background: var(--panel2);
-    color: white;
-    padding: 11px 18px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  button:hover {
-    border-color: var(--accent);
-  }
-
-  button.primary {
-    background: var(--accent);
-    color: #111;
-    border-color: var(--accent);
-  }
-
-  .status {
-    max-width: 1500px;
-    margin: 14px auto;
-    padding: 0 20px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-  }
-
-  .status strong {
-    color: var(--accent2);
-  }
-
-  main {
-    max-width: 1500px;
-    margin: auto;
-    padding: 10px 20px 80px;
-  }
-
-  /* -------------------------
-     BOARD
-  -------------------------- */
-
-  .board {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .week {
-    background: rgba(17, 23, 34, .92);
-    border: 1px solid var(--line);
-    border-radius: 12px;
+header {
+    position: relative;
     overflow: hidden;
-  }
 
-  .week-title {
-    padding: 10px 15px;
-    background: #0e141e;
-    border-bottom: 1px solid var(--line);
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent);
-    font-weight: 800;
-  }
+    text-align: center;
 
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
+    padding:
+        46px
+        20px
+        34px;
 
-  .question {
-    padding: 13px;
-    border-right: 1px solid var(--line);
-  }
+    border-bottom:
+        1px solid var(--line);
+}
 
-  .question:last-child {
-    border-right: none;
-  }
+header::before {
+    content: "HERO";
+    position: absolute;
 
-  .question-label {
+    left: 4%;
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        rotate(-90deg);
+
+    color:
+        rgba(22,119,210,.12);
+
+    font-size:
+        clamp(50px,8vw,110px);
+
+    font-weight: 900;
+    letter-spacing: 12px;
+
+    pointer-events: none;
+}
+
+header::after {
+    content: "VILLAIN";
+    position: absolute;
+
+    right: -2%;
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        rotate(90deg);
+
+    color:
+        rgba(207,38,61,.12);
+
+    font-size:
+        clamp(42px,7vw,100px);
+
+    font-weight: 900;
+    letter-spacing: 10px;
+
+    pointer-events: none;
+}
+
+.eyebrow {
+    color: var(--gold);
+
     font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1.4px;
-    margin-bottom: 7px;
-    font-weight: 700;
-  }
+    font-weight: 800;
 
-  .slot {
-    min-height: 52px;
-    background: var(--slot);
-    border: 1px dashed #455168;
-    border-radius: 8px;
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+}
+
+h1 {
+    margin:
+        9px
+        0
+        7px;
+
+    font-size:
+        clamp(43px,8vw,84px);
+
+    line-height: .95;
+
+    letter-spacing:
+        clamp(5px,1.5vw,14px);
+
+    text-transform: uppercase;
+}
+
+.title-line {
+    display: inline-block;
+
+    width: min(530px,80vw);
+    height: 2px;
+
+    margin: 9px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--hero),
+            var(--gold),
+            var(--villain)
+        );
+}
+
+.subtitle {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* ======================================================
+   INSTRUCTIONS
+====================================================== */
+
+.instructions {
+    max-width: 920px;
+
+    margin:
+        22px auto
+        16px;
+
+    padding:
+        14px 22px;
+
+    text-align: center;
+
+    background:
+        rgba(16,20,28,.82);
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 10px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.instructions strong {
+    color: var(--gold-light);
+}
+
+
+/* ======================================================
+   CONTROLS
+====================================================== */
+
+.controls {
+    max-width: 1500px;
+
+    margin:
+        16px auto
+        0;
+
+    padding:
+        0 20px;
+
     display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+button {
+    appearance: none;
+
+    padding:
+        11px
+        19px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 7px;
+
+    background: var(--panel-light);
+
+    color: white;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+    cursor: pointer;
+
+    transition: .15s ease;
+}
+
+button:hover {
+    border-color: var(--gold);
+
+    transform:
+        translateY(-1px);
+}
+
+button.primary {
+    background:
+        linear-gradient(
+            135deg,
+            #b99740,
+            var(--gold-light)
+        );
+
+    color: #121212;
+
+    border-color: var(--gold);
+}
+
+
+/* ======================================================
+   STATUS
+====================================================== */
+
+.status {
+    max-width: 1500px;
+
+    margin:
+        15px auto
+        8px;
+
+    padding:
+        0 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    letter-spacing: .5px;
+}
+
+.status strong {
+    color: var(--gold-light);
+}
+
+
+/* ======================================================
+   MAIN
+====================================================== */
+
+main {
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding:
+        10px
+        20px
+        90px;
+}
+
+
+/* ======================================================
+   BOARD
+====================================================== */
+
+.board {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+.week {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        rgba(16,20,28,.94);
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 11px;
+}
+
+.week::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            var(--hero),
+            var(--villain)
+        );
+}
+
+.week-title {
+    padding:
+        10px
+        15px;
+
+    background:
+        rgba(8,11,16,.85);
+
+    border-bottom:
+        1px solid var(--line);
+
+    color: var(--gold);
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+}
+
+.week-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+}
+
+.question {
+    padding: 12px;
+
+    border-right:
+        1px solid var(--line);
+}
+
+.question:last-child {
+    border-right: none;
+}
+
+.question-label {
+    margin-bottom: 7px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+/* ======================================================
+   ANSWER SLOTS
+====================================================== */
+
+.slot {
+    min-height: 50px;
+
+    padding: 6px;
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
-    padding: 6px;
-    transition: .15s ease;
-  }
 
-  .slot.drag-over {
-    border-color: var(--accent);
-    background: #191a13;
-  }
+    background: var(--slot);
 
-  .slot.correct {
-    background: var(--correct-dark);
-    border: 1px solid var(--correct);
-  }
+    border:
+        1px dashed #475264;
 
-  .slot.incorrect {
-    border-color: var(--wrong);
-  }
-
-  .slot.empty::after {
-    content: "DROP ANSWER";
-    color: #465164;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    font-weight: 700;
-  }
-
-  /* BattleBack */
-
-  .battleback {
-    border-color: #655a35;
-  }
-
-  .battleback .week-title {
-    background: #1c1a12;
-    color: var(--accent2);
-  }
-
-  .battleback-grid {
-    display: grid;
-    grid-template-columns: 120px 1fr 1fr;
-  }
-
-  .bb-head {
-    padding: 9px 12px;
-    background: #131820;
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 800;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .bb-cell {
-    padding: 10px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .bb-row-label {
-    display: flex;
-    align-items: center;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 800;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  /* -------------------------
-     ANSWER BANK
-  -------------------------- */
-
-  .bank-section {
-    margin-top: 34px;
-  }
-
-  .bank-heading {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-  }
-
-  .bank-heading h2 {
-    margin: 0;
-    font-size: 18px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .bank-heading span {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .bank {
-    min-height: 65px;
-    background: rgba(17, 23, 34, .7);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .tile {
-    background: var(--tile);
-    border: 1px solid #3c485d;
     border-radius: 7px;
-    padding: 9px 12px;
-    font-size: 13px;
-    cursor: grab;
-    user-select: none;
-    transition: transform .1s ease, border-color .1s ease;
-  }
 
-  .tile:hover {
-    border-color: var(--accent);
-    transform: translateY(-1px);
-  }
+    transition: .15s ease;
+}
 
-  .tile:active {
-    cursor: grabbing;
-  }
+.slot.empty::after {
+    content: "CLASSIFIED";
 
-  .tile.selected {
-    border-color: var(--accent2);
-    box-shadow: 0 0 0 2px rgba(214,184,90,.2);
-  }
+    color: #3e4755;
 
-  .slot .tile {
-    width: 100%;
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.slot.drag-over {
+    border-color: var(--gold);
+
+    background:
+        rgba(216,182,90,.08);
+
+    box-shadow:
+        inset
+        0 0 15px
+        rgba(216,182,90,.06);
+}
+
+.slot.correct {
+    background: var(--correct-dark);
+
+    border:
+        1px solid var(--correct);
+}
+
+.slot.incorrect {
+    border:
+        1px solid var(--incorrect);
+
+    background:
+        rgba(158,52,66,.08);
+}
+
+
+/* ======================================================
+   BATTLEBACK
+====================================================== */
+
+.battleback {
+    margin:
+        6px
+        0;
+
+    border-color:
+        #685b35;
+
+    box-shadow:
+        0 0 20px
+        rgba(216,182,90,.06);
+}
+
+.battleback::before {
+    width: 4px;
+
+    background: var(--gold);
+}
+
+.battleback .week-title {
+    color: #111;
+
+    background:
+        linear-gradient(
+            90deg,
+            #a98938,
+            var(--gold-light),
+            #a98938
+        );
+
     text-align: center;
-    cursor: pointer;
-  }
 
-  .slot.correct .tile {
-    background: var(--correct);
-    border-color: #56ce91;
-    color: white;
-  }
+    font-size: 13px;
 
-  .instructions {
-    max-width: 900px;
-    margin: 20px auto 26px;
-    padding: 14px 18px;
-    background: rgba(17,23,34,.7);
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    letter-spacing: 4px;
+}
+
+.battleback-grid {
+    display: grid;
+
+    grid-template-columns:
+        115px 1fr 1fr;
+}
+
+.bb-head {
+    padding:
+        9px
+        11px;
+
+    background:
+        #11161e;
+
+    border-bottom:
+        1px solid var(--line);
+
     color: var(--muted);
-    text-align: center;
-    font-size: 13px;
-    line-height: 1.5;
-  }
 
-  @media (max-width: 800px) {
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.bb-cell {
+    padding: 9px;
+
+    border-bottom:
+        1px solid var(--line);
+}
+
+.bb-row-label {
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        9px 12px;
+
+    border-bottom:
+        1px solid var(--line);
+
+    color: var(--gold-light);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* ======================================================
+   ANSWER BANKS
+====================================================== */
+
+.answer-zone {
+    margin-top: 40px;
+
+    padding-top: 6px;
+
+    border-top:
+        1px solid var(--line);
+}
+
+.answer-zone-title {
+    margin:
+        18px 0
+        4px;
+
+    text-align: center;
+
+    color: var(--gold);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+}
+
+.answer-zone-subtitle {
+    margin-bottom: 24px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.bank-section {
+    margin-top: 25px;
+}
+
+.bank-heading {
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content:
+        space-between;
+
+    margin-bottom: 10px;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        1px solid var(--line);
+}
+
+.bank-heading h2 {
+    margin: 0;
+
+    font-size: 18px;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+}
+
+.bank-section.houseguest-bank
+.bank-heading h2 {
+    background:
+        linear-gradient(
+            90deg,
+            #61b3ff,
+            var(--gold-light),
+            #ff697c
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+.bank-section.competition-bank
+.bank-heading h2 {
+    color: var(--gold-light);
+}
+
+.bank-heading span {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+.bank {
+    min-height: 72px;
+
+    padding: 11px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    background:
+        rgba(16,20,28,.72);
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 10px;
+}
+
+
+/* ======================================================
+   TILES
+====================================================== */
+
+.tile {
+    padding:
+        9px
+        12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #252d3a,
+            #1c2330
+        );
+
+    border:
+        1px solid #404b5d;
+
+    border-radius: 6px;
+
+    color: white;
+
+    font-size: 12px;
+
+    cursor: grab;
+
+    user-select: none;
+
+    transition:
+        transform .1s ease,
+        border-color .1s ease,
+        box-shadow .1s ease;
+}
+
+.tile:hover {
+    transform:
+        translateY(-1px);
+
+    border-color: var(--gold);
+}
+
+.tile:active {
+    cursor: grabbing;
+}
+
+.tile.selected {
+    border-color: var(--gold-light);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(216,182,90,.23),
+        0 0 18px
+        rgba(216,182,90,.13);
+
+    transform:
+        translateY(-2px);
+}
+
+.slot .tile {
+    width: 100%;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.slot.correct .tile {
+    background:
+        linear-gradient(
+            180deg,
+            #28ae71,
+            #1b8153
+        );
+
+    border-color:
+        #57d397;
+
+    color: white;
+}
+
+
+/* ======================================================
+   COMPLETION MESSAGE
+====================================================== */
+
+.complete {
+    color: var(--gold-light);
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 800px) {
+
+    header::before,
+    header::after {
+        display: none;
+    }
+
     .week-grid {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
 
     .question {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
+        border-right: none;
+
+        border-bottom:
+            1px solid var(--line);
     }
 
     .question:last-child {
-      border-bottom: none;
+        border-bottom: none;
     }
 
     .battleback-grid {
-      grid-template-columns: 75px 1fr 1fr;
+        grid-template-columns:
+            70px 1fr 1fr;
     }
 
     h1 {
-      letter-spacing: 3px;
+        letter-spacing: 4px;
     }
-  }
+
+    .bank-heading {
+        display: block;
+    }
+
+    .bank-heading span {
+        display: block;
+
+        margin-top: 4px;
+    }
+}
+
 </style>
 </head>
 
+
 <body>
 
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
 <header>
-  <div class="eyebrow">Fantasy Big Brother 28</div>
-  <h1>DECLASSIFIED</h1>
-  <div class="subtitle">Reconstruct the season. Put the classified files back in order.</div>
+
+    <div class="eyebrow">
+        Fantasy Big Brother 28
+    </div>
+
+    <h1>
+        DECLASSIFIED
+    </h1>
+
+    <div class="title-line"></div>
+
+    <div class="subtitle">
+        Heroes vs. Villains • Reconstruct the Season
+    </div>
+
 </header>
 
+
+<!-- =====================================================
+     INSTRUCTIONS
+====================================================== -->
+
 <div class="instructions">
-  Drag answers into the correct spaces — or click a tile and then click its destination.
-  Click a placed tile to return it to the answer bank.
-  Duplicate answers are interchangeable.
+
+    The Fantasy BB28 files have been scrambled.
+
+    Reconstruct the season by placing every
+    <strong>Houseguest</strong>
+    and
+    <strong>Competition</strong>
+    in its correct place in history.
+
+    <br><br>
+
+    <strong>Click</strong>
+    a tile and then click its destination,
+    or simply
+    <strong>drag and drop</strong>.
+
+    Click a placed tile to return it to the Answer Bank.
+
 </div>
+
+
+<!-- =====================================================
+     CONTROLS
+====================================================== -->
 
 <div class="controls">
-  <button id="shuffleBtn">Shuffle Remaining Tiles</button>
-  <button id="resetBtn">Reset Board</button>
-  <button class="primary" id="checkBtn">Check Answers</button>
+
+    <button id="shuffleBtn">
+        Shuffle Remaining Tiles
+    </button>
+
+    <button id="resetBtn">
+        Reset Board
+    </button>
+
+    <button
+        class="primary"
+        id="checkBtn"
+    >
+        Declassify Files
+    </button>
+
 </div>
 
-<div class="status" id="status">
-  <strong>0</strong> of <strong>47</strong> files correctly declassified.
-</div>
+
+<div
+    class="status"
+    id="status"
+></div>
+
+
+<!-- =====================================================
+     GAME
+====================================================== -->
 
 <main>
 
-  <div class="board" id="board"></div>
+    <div
+        class="board"
+        id="board"
+    ></div>
 
-  <div id="banks"></div>
+
+    <div class="answer-zone">
+
+        <div class="answer-zone-title">
+            Classified Answer Bank
+        </div>
+
+        <div class="answer-zone-subtitle">
+            Every file belongs somewhere.
+            There are no red herrings.
+        </div>
+
+        <div id="banks"></div>
+
+    </div>
 
 </main>
 
+
+
 <script>
 
-/* =========================================================
+
+/* ======================================================
    DECLASSIFIED
-   Fantasy Big Brother 28
-   ========================================================= */
+   FANTASY BIG BROTHER 28
+   HEROES VS. VILLAINS
+====================================================== */
 
 
-/* ---------------------------------------------------------
-   SOURCE OF TRUTH
-   --------------------------------------------------------- */
+/* ======================================================
+   OFFICIAL GAME DATA
 
-const weeks = [
-  {
-    title: "Week 1",
-    answers: [
-      ["HOH", "Mason", "hoh"],
-      ["Veto Competition", "Invasion!", "veto"],
-      ["Evicted Houseguest", "Garrett", "evicted"]
-    ]
-  },
-  {
-    title: "Week 2",
-    answers: [
-      ["HOH", "Matt", "hoh"],
-      ["Veto Competition", "CBNN: Breaking News", "veto"],
-      ["Evicted Houseguest", "Anna", "evicted"]
-    ]
-  },
-  {
-    title: "Week 3",
-    answers: [
-      ["HOH", "Ryan", "hoh"],
-      ["Veto Competition", "Heroes Needed!", "veto"],
-      ["Evicted Houseguest", "Matt", "evicted"]
-    ]
-  },
+   This follows the supplied Fantasy BB28 chart.
+====================================================== */
 
-  { type: "battleback", title: "BattleBack 1",
-    rounds: [
-      ["Comp 1", "Secret Squares", "Matt"],
-      ["Comp 2", "Secret Files", "Anna"],
-      ["Comp 3", "Secret Pleas", "Anna"]
-    ]
-  },
+const sections = [
 
-  {
-    title: "Week 5",
-    answers: [
-      ["HOH", "Cas", "hoh"],
-      ["Veto Competition", "The Signal", "veto"],
-      ["Evicted Houseguest", "Mason", "evicted"]
-    ]
-  },
-  {
-    title: "Week 6",
-    answers: [
-      ["HOH", "Max", "hoh"],
-      ["Veto Competition", "Mayor Otev’s Heroic Showdown", "veto"],
-      ["Evicted Houseguest", "Anna", "evicted"]
-    ]
-  },
-  {
-    title: "Week 7",
-    answers: [
-      ["HOH", "Tyler", "hoh"],
-      ["Veto Competition", "Knight Moves", "veto"],
-      ["Evicted Houseguest", "Ryan", "evicted"]
-    ]
-  },
 
-  { type: "battleback", title: "BattleBack 2",
-    rounds: [
-      ["Comp 1", "Connect 4", "Matt"],
-      ["Comp 2", "Code Cracker", "Matt"],
-      ["Comp 3", "Flappy’s Revenge", "Matt"],
-      ["Comp 4", "Puzzle Relay", "Matt"]
-    ]
-  },
+    /* ----------------------
+       WEEK 1
+    ---------------------- */
 
-  {
-    title: "Week 9",
-    answers: [
-      ["HOH", "Cas", "hoh"],
-      ["Veto Competition", "The People’s Choice", "veto"],
-      ["Evicted Houseguest", "Kerry", "evicted"]
-    ]
-  },
-  {
-    title: "Week 10",
-    answers: [
-      ["HOH", "Sophia", "hoh"],
-      ["Veto Competition", "Hide and Go Veto", "veto"],
-      ["Evicted Houseguest", "Matt", "evicted"]
-    ]
-  },
-  {
-    title: "Week 10 Rewind",
-    answers: [
-      ["HOH", "Matt", "hoh"],
-      ["Veto Competition", "Hide and Go Veto", "veto"],
-      ["Evicted Houseguest", "Tyler", "evicted"]
-    ]
-  },
-  {
-    title: "Double Eviction",
-    answers: [
-      ["HOH", "Max", "hoh"],
-      ["Veto Competition", "Power Surge", "veto"],
-      ["Evicted Houseguest", "Cas", "evicted"]
-    ]
-  },
-  {
-    title: "Week 11",
-    answers: [
-      ["HOH", "Matt", "hoh"],
-      ["Veto Competition", "Zingbot’s Hero Vs Villain Roast", "veto"],
-      ["Evicted Houseguest", "Sophia", "evicted"]
-    ]
-  }
+    {
+        title: "Week 1",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Mason",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Invasion!",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Garrett",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 2
+    ---------------------- */
+
+    {
+        title: "Week 2",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Matt",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "CBNN: Breaking News",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Anna",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 3
+    ---------------------- */
+
+    {
+        title: "Week 3",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Ryan",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Heroes Needed!",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Matt",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       BATTLEBACK 1
+    ---------------------- */
+
+    {
+        type: "battleback",
+
+        title: "BattleBack 1",
+
+        rounds: [
+
+            {
+                round: "Comp 1",
+                competition: "Secret Squares",
+                winner: "Matt"
+            },
+
+            {
+                round: "Comp 2",
+                competition: "Secret Files",
+                winner: "Anna"
+            },
+
+            {
+                round: "Comp 3",
+                competition: "Secret Pleas",
+                winner: "Anna"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 5
+    ---------------------- */
+
+    {
+        title: "Week 5",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Cas",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "The Signal",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Mason",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 6
+    ---------------------- */
+
+    {
+        title: "Week 6",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Max",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Mayor Otev’s Heroic Showdown",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Anna",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 7
+    ---------------------- */
+
+    {
+        title: "Week 7",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Tyler",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Knight Moves",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Ryan",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       BATTLEBACK 2
+    ---------------------- */
+
+    {
+        type: "battleback",
+
+        title: "BattleBack 2",
+
+        rounds: [
+
+            {
+                round: "Comp 1",
+                competition: "Connect 4",
+                winner: "Matt"
+            },
+
+            {
+                round: "Comp 2",
+                competition: "Code Cracker",
+                winner: "Matt"
+            },
+
+            {
+                round: "Comp 3",
+                competition: "Flappy’s Revenge",
+                winner: "Matt"
+            },
+
+            {
+                round: "Comp 4",
+                competition: "Puzzle Relay",
+                winner: "Matt"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 9
+    ---------------------- */
+
+    {
+        title: "Week 9",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Cas",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "The People’s Choice",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Kerry",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 10
+    ---------------------- */
+
+    {
+        title: "Week 10",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Sophia",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Hide and Go Veto",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Matt",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 10 REWIND
+    ---------------------- */
+
+    {
+        title: "Week 10 — Rewind",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Matt",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Hide and Go Veto",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Tyler",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       DOUBLE EVICTION
+    ---------------------- */
+
+    {
+        title: "Double Eviction",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Max",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Power Surge",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Cas",
+                type: "houseguest"
+            }
+
+        ]
+    },
+
+
+    /* ----------------------
+       WEEK 11
+    ---------------------- */
+
+    {
+        title: "Week 11",
+
+        answers: [
+
+            {
+                label: "HOH",
+                answer: "Matt",
+                type: "houseguest"
+            },
+
+            {
+                label: "Veto Competition",
+                answer: "Zingbot’s Hero Vs Villain Roast",
+                type: "competition"
+            },
+
+            {
+                label: "Evicted Houseguest",
+                answer: "Sophia",
+                type: "houseguest"
+            }
+
+        ]
+    }
+
 ];
 
 
-/* ---------------------------------------------------------
-   GAME STATE
-   --------------------------------------------------------- */
+
+/* ======================================================
+   STATE
+====================================================== */
+
+const board =
+    document.getElementById("board");
+
+const banksContainer =
+    document.getElementById("banks");
+
+const status =
+    document.getElementById("status");
+
 
 let selectedTile = null;
+
 let tileCounter = 0;
+
 let slotCounter = 0;
 
-const board = document.getElementById("board");
-const banksContainer = document.getElementById("banks");
 
 
-/* ---------------------------------------------------------
-   UTILITY
-   --------------------------------------------------------- */
+/* ======================================================
+   RANDOMIZER
+====================================================== */
 
 function shuffle(array) {
-  const a = [...array];
 
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+    const copy = [...array];
 
-  return a;
+    for (
+        let i = copy.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+        [
+            copy[i],
+            copy[j]
+        ] = [
+            copy[j],
+            copy[i]
+        ];
+
+    }
+
+    return copy;
 }
 
 
-/* ---------------------------------------------------------
-   BUILD DATA
-   --------------------------------------------------------- */
 
-const tilesByCategory = {
-  hoh: [],
-  veto: [],
-  evicted: [],
-  battleComp: [],
-  battleWinner: []
-};
+/* ======================================================
+   GENERATE ANSWER BANK DATA
 
-const slotData = [];
+   There are only TWO types:
 
-weeks.forEach(section => {
+   HOUSEGUEST
+   COMPETITION
 
-  if (section.type === "battleback") {
+   Every required duplicate gets its own tile.
+====================================================== */
 
-    section.rounds.forEach(round => {
+const answerBanks = {
 
-      const [roundName, comp, winner] = round;
+    houseguest: [],
 
-      slotData.push({
-        section: section.title,
-        label: roundName + " — Competition",
-        answer: comp,
-        category: "battleComp"
-      });
-
-      tilesByCategory.battleComp.push(comp);
-
-      slotData.push({
-        section: section.title,
-        label: roundName + " — Winner",
-        answer: winner,
-        category: "battleWinner"
-      });
-
-      tilesByCategory.battleWinner.push(winner);
-
-    });
-
-  } else {
-
-    section.answers.forEach(([label, answer, category]) => {
-
-      slotData.push({
-        section: section.title,
-        label,
-        answer,
-        category
-      });
-
-      tilesByCategory[category].push(answer);
-
-    });
-
-  }
-
-});
-
-
-/* ---------------------------------------------------------
-   OPTIONAL RED HERRINGS
-   Add anything you want here.
-   They automatically join the appropriate answer bank.
-   --------------------------------------------------------- */
-
-const redHerrings = {
-
-  hoh: [
-    // "Kace"
-  ],
-
-  veto: [
-    // "OTEV",
-    // "Pressure Cooker"
-  ],
-
-  evicted: [
-    // "Kace"
-  ],
-
-  battleComp: [
-    // "System Override"
-  ],
-
-  battleWinner: [
-    // "Mason"
-  ]
+    competition: []
 
 };
 
-Object.keys(redHerrings).forEach(category => {
-  tilesByCategory[category].push(...redHerrings[category]);
-});
+
+sections.forEach(section => {
 
 
-/* ---------------------------------------------------------
-   BUILD BOARD
-   --------------------------------------------------------- */
+    if (
+        section.type ===
+        "battleback"
+    ) {
 
-function createSlot(answer, category) {
+        section.rounds.forEach(round => {
 
-  const slot = document.createElement("div");
+            answerBanks
+                .competition
+                .push(
+                    round.competition
+                );
 
-  slot.className = "slot empty";
-  slot.dataset.answer = answer;
-  slot.dataset.category = category;
-  slot.dataset.slotId = "slot-" + (++slotCounter);
+            answerBanks
+                .houseguest
+                .push(
+                    round.winner
+                );
 
-  slot.addEventListener("dragover", e => {
-    e.preventDefault();
-    slot.classList.add("drag-over");
-  });
-
-  slot.addEventListener("dragleave", () => {
-    slot.classList.remove("drag-over");
-  });
-
-  slot.addEventListener("drop", e => {
-
-    e.preventDefault();
-
-    slot.classList.remove("drag-over");
-
-    const tileId = e.dataTransfer.getData("text/plain");
-    const tile = document.getElementById(tileId);
-
-    if (tile) {
-      placeTile(tile, slot);
-    }
-
-  });
-
-  slot.addEventListener("click", e => {
-
-    if (e.target.classList.contains("tile")) return;
-
-    if (selectedTile) {
-      placeTile(selectedTile, slot);
-    }
-
-  });
-
-  return slot;
-}
-
-
-function buildBoard() {
-
-  board.innerHTML = "";
-
-  weeks.forEach(section => {
-
-    const wrapper = document.createElement("section");
-    wrapper.className = "week";
-
-    if (section.type === "battleback") {
-      wrapper.classList.add("battleback");
-    }
-
-    const title = document.createElement("div");
-    title.className = "week-title";
-    title.textContent = section.title;
-
-    wrapper.appendChild(title);
-
-
-    /* STANDARD WEEK */
-
-    if (section.type !== "battleback") {
-
-      const grid = document.createElement("div");
-      grid.className = "week-grid";
-
-      section.answers.forEach(([label, answer, category]) => {
-
-        const question = document.createElement("div");
-        question.className = "question";
-
-        const qLabel = document.createElement("div");
-        qLabel.className = "question-label";
-        qLabel.textContent = label;
-
-        const slot = createSlot(answer, category);
-
-        question.appendChild(qLabel);
-        question.appendChild(slot);
-
-        grid.appendChild(question);
-
-      });
-
-      wrapper.appendChild(grid);
+        });
 
     }
 
-
-    /* BATTLEBACK */
 
     else {
 
-      const grid = document.createElement("div");
-      grid.className = "battleback-grid";
+        section.answers.forEach(item => {
 
-      ["Round", "BattleBack Competition", "Winner"].forEach(text => {
-        const head = document.createElement("div");
-        head.className = "bb-head";
-        head.textContent = text;
-        grid.appendChild(head);
-      });
+            answerBanks[
+                item.type
+            ].push(
+                item.answer
+            );
 
-      section.rounds.forEach(([roundName, comp, winner]) => {
-
-        const rowLabel = document.createElement("div");
-        rowLabel.className = "bb-row-label";
-        rowLabel.textContent = roundName;
-
-        const compCell = document.createElement("div");
-        compCell.className = "bb-cell";
-        compCell.appendChild(
-          createSlot(comp, "battleComp")
-        );
-
-        const winnerCell = document.createElement("div");
-        winnerCell.className = "bb-cell";
-        winnerCell.appendChild(
-          createSlot(winner, "battleWinner")
-        );
-
-        grid.appendChild(rowLabel);
-        grid.appendChild(compCell);
-        grid.appendChild(winnerCell);
-
-      });
-
-      wrapper.appendChild(grid);
+        });
 
     }
 
-    board.appendChild(wrapper);
+});
 
-  });
+
+
+/* ======================================================
+   CREATE SLOT
+====================================================== */
+
+function createSlot(
+    answer,
+    type
+) {
+
+    const slot =
+        document.createElement("div");
+
+    slot.className =
+        "slot empty";
+
+    slot.dataset.answer =
+        answer;
+
+    slot.dataset.type =
+        type;
+
+    slot.dataset.slotId =
+        "slot-" +
+        (++slotCounter);
+
+
+    /* ----------------------
+       DRAG OVER
+    ---------------------- */
+
+    slot.addEventListener(
+        "dragover",
+        event => {
+
+            event.preventDefault();
+
+            slot.classList.add(
+                "drag-over"
+            );
+
+        }
+    );
+
+
+    slot.addEventListener(
+        "dragleave",
+        () => {
+
+            slot.classList.remove(
+                "drag-over"
+            );
+
+        }
+    );
+
+
+    /* ----------------------
+       DROP
+    ---------------------- */
+
+    slot.addEventListener(
+        "drop",
+        event => {
+
+            event.preventDefault();
+
+            slot.classList.remove(
+                "drag-over"
+            );
+
+            const tileId =
+                event
+                    .dataTransfer
+                    .getData(
+                        "text/plain"
+                    );
+
+            const tile =
+                document
+                    .getElementById(
+                        tileId
+                    );
+
+            if (tile) {
+
+                placeTile(
+                    tile,
+                    slot
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ----------------------
+       CLICK DESTINATION
+    ---------------------- */
+
+    slot.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target
+                    .classList
+                    .contains("tile")
+            ) {
+
+                return;
+
+            }
+
+            if (selectedTile) {
+
+                placeTile(
+                    selectedTile,
+                    slot
+                );
+
+            }
+
+        }
+    );
+
+
+    return slot;
+}
+
+
+
+/* ======================================================
+   BUILD BOARD
+====================================================== */
+
+function buildBoard() {
+
+    board.innerHTML = "";
+
+
+    sections.forEach(section => {
+
+
+        const wrapper =
+            document
+                .createElement(
+                    "section"
+                );
+
+        wrapper.className =
+            "week";
+
+
+        if (
+            section.type ===
+            "battleback"
+        ) {
+
+            wrapper.classList.add(
+                "battleback"
+            );
+
+        }
+
+
+        const title =
+            document
+                .createElement(
+                    "div"
+                );
+
+        title.className =
+            "week-title";
+
+        title.textContent =
+            section.title;
+
+        wrapper.appendChild(
+            title
+        );
+
+
+        /* =============================================
+           STANDARD WEEK
+        ============================================= */
+
+        if (
+            section.type !==
+            "battleback"
+        ) {
+
+            const grid =
+                document
+                    .createElement(
+                        "div"
+                    );
+
+            grid.className =
+                "week-grid";
+
+
+            section.answers.forEach(
+                item => {
+
+                    const question =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+                    question.className =
+                        "question";
+
+
+                    const label =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+                    label.className =
+                        "question-label";
+
+                    label.textContent =
+                        item.label;
+
+
+                    const slot =
+                        createSlot(
+                            item.answer,
+                            item.type
+                        );
+
+
+                    question.appendChild(
+                        label
+                    );
+
+                    question.appendChild(
+                        slot
+                    );
+
+                    grid.appendChild(
+                        question
+                    );
+
+                }
+            );
+
+
+            wrapper.appendChild(
+                grid
+            );
+
+        }
+
+
+        /* =============================================
+           BATTLEBACK
+        ============================================= */
+
+        else {
+
+            const grid =
+                document
+                    .createElement(
+                        "div"
+                    );
+
+            grid.className =
+                "battleback-grid";
+
+
+            [
+                "Round",
+                "BattleBack Competition",
+                "Winner"
+            ]
+            .forEach(text => {
+
+                const head =
+                    document
+                        .createElement(
+                            "div"
+                        );
+
+                head.className =
+                    "bb-head";
+
+                head.textContent =
+                    text;
+
+                grid.appendChild(
+                    head
+                );
+
+            });
+
+
+            section.rounds.forEach(
+                round => {
+
+                    const rowLabel =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+                    rowLabel.className =
+                        "bb-row-label";
+
+                    rowLabel.textContent =
+                        round.round;
+
+
+                    const compCell =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+                    compCell.className =
+                        "bb-cell";
+
+                    compCell.appendChild(
+
+                        createSlot(
+                            round.competition,
+                            "competition"
+                        )
+
+                    );
+
+
+                    const winnerCell =
+                        document
+                            .createElement(
+                                "div"
+                            );
+
+                    winnerCell.className =
+                        "bb-cell";
+
+                    winnerCell.appendChild(
+
+                        createSlot(
+                            round.winner,
+                            "houseguest"
+                        )
+
+                    );
+
+
+                    grid.appendChild(
+                        rowLabel
+                    );
+
+                    grid.appendChild(
+                        compCell
+                    );
+
+                    grid.appendChild(
+                        winnerCell
+                    );
+
+                }
+            );
+
+
+            wrapper.appendChild(
+                grid
+            );
+
+        }
+
+
+        board.appendChild(
+            wrapper
+        );
+
+    });
 
 }
 
 
-/* ---------------------------------------------------------
-   TILES
-   --------------------------------------------------------- */
 
-function createTile(text, category) {
+/* ======================================================
+   CREATE TILE
+====================================================== */
 
-  const tile = document.createElement("div");
+function createTile(
+    value,
+    type
+) {
 
-  tile.className = "tile";
-  tile.textContent = text;
+    const tile =
+        document
+            .createElement(
+                "div"
+            );
 
-  tile.id = "tile-" + (++tileCounter);
+    tile.className =
+        "tile";
 
-  /*
-    IMPORTANT:
-    The visible VALUE determines correctness.
+    tile.textContent =
+        value;
 
-    Therefore:
-      Matt tile #1
-      Matt tile #2
-      Matt tile #3
+    tile.id =
+        "tile-" +
+        (++tileCounter);
 
-    are completely interchangeable.
-  */
+    tile.dataset.value =
+        value;
 
-  tile.dataset.value = text;
-  tile.dataset.category = category;
-  tile.draggable = true;
+    tile.dataset.type =
+        type;
 
-
-  tile.addEventListener("dragstart", e => {
-
-    e.dataTransfer.setData("text/plain", tile.id);
-
-    clearSelection();
-
-  });
+    tile.draggable =
+        true;
 
 
-  tile.addEventListener("click", e => {
+    /* =============================================
+       DRAG START
+    ============================================= */
 
-    e.stopPropagation();
+    tile.addEventListener(
+        "dragstart",
+        event => {
 
-    /*
-      If already placed on board:
-      clicking returns it to its answer bank.
-    */
+            event
+                .dataTransfer
+                .setData(
+                    "text/plain",
+                    tile.id
+                );
 
-    if (tile.parentElement.classList.contains("slot")) {
+            clearSelection();
 
-      returnTileToBank(tile);
-      return;
+        }
+    );
 
-    }
 
-    /*
-      Otherwise select it for click-to-place.
-    */
+    /* =============================================
+       CLICK TILE
+    ============================================= */
 
-    if (selectedTile === tile) {
+    tile.addEventListener(
+        "click",
+        event => {
 
-      clearSelection();
+            event.stopPropagation();
 
-    } else {
 
-      clearSelection();
+            /*
+                If tile is already
+                on the board:
 
-      selectedTile = tile;
-      tile.classList.add("selected");
+                clicking it returns
+                it to its bank.
+            */
 
-    }
+            if (
+                tile.parentElement
+                    .classList
+                    .contains("slot")
+            ) {
 
-  });
+                returnTileToBank(
+                    tile
+                );
 
-  return tile;
+                return;
+
+            }
+
+
+            /*
+                Otherwise:
+                select or deselect.
+            */
+
+            if (
+                selectedTile === tile
+            ) {
+
+                clearSelection();
+
+            }
+
+
+            else {
+
+                clearSelection();
+
+                selectedTile =
+                    tile;
+
+                tile.classList.add(
+                    "selected"
+                );
+
+            }
+
+        }
+    );
+
+
+    return tile;
 }
 
 
-/* ---------------------------------------------------------
-   BANKS
-   --------------------------------------------------------- */
+
+/* ======================================================
+   BUILD ANSWER BANKS
+====================================================== */
 
 const bankNames = {
-  hoh: "HOH",
-  veto: "Veto Competitions",
-  evicted: "Evicted Houseguests",
-  battleComp: "BattleBack Competitions",
-  battleWinner: "BattleBack Winners"
+
+    houseguest:
+        "Houseguests",
+
+    competition:
+        "Competitions"
+
 };
 
 
 function buildBanks() {
 
-  banksContainer.innerHTML = "";
+    banksContainer.innerHTML =
+        "";
 
-  Object.entries(tilesByCategory).forEach(([category, answers]) => {
 
-    const section = document.createElement("section");
-    section.className = "bank-section";
+    [
+        "houseguest",
+        "competition"
+    ]
+    .forEach(type => {
 
-    const heading = document.createElement("div");
-    heading.className = "bank-heading";
 
-    const h2 = document.createElement("h2");
-    h2.textContent = bankNames[category];
+        const section =
+            document
+                .createElement(
+                    "section"
+                );
 
-    const helper = document.createElement("span");
-    helper.textContent = "Drag or click to place";
+        section.className =
+            "bank-section " +
+            type +
+            "-bank";
 
-    heading.appendChild(h2);
-    heading.appendChild(helper);
 
-    const bank = document.createElement("div");
+        const heading =
+            document
+                .createElement(
+                    "div"
+                );
 
-    bank.className = "bank";
-    bank.dataset.category = category;
-    bank.id = "bank-" + category;
+        heading.className =
+            "bank-heading";
 
-    shuffle(answers).forEach(answer => {
-      bank.appendChild(
-        createTile(answer, category)
-      );
+
+        const h2 =
+            document
+                .createElement(
+                    "h2"
+                );
+
+        h2.textContent =
+            bankNames[type];
+
+
+        const helper =
+            document
+                .createElement(
+                    "span"
+                );
+
+        helper.textContent =
+            "Click or drag to place";
+
+
+        heading.appendChild(
+            h2
+        );
+
+        heading.appendChild(
+            helper
+        );
+
+
+        const bank =
+            document
+                .createElement(
+                    "div"
+                );
+
+        bank.className =
+            "bank";
+
+        bank.id =
+            "bank-" + type;
+
+        bank.dataset.type =
+            type;
+
+
+        shuffle(
+            answerBanks[type]
+        )
+        .forEach(answer => {
+
+            bank.appendChild(
+
+                createTile(
+                    answer,
+                    type
+                )
+
+            );
+
+        });
+
+
+        /* =============================================
+           ALLOW DRAGGING BACK INTO BANK
+        ============================================= */
+
+        bank.addEventListener(
+            "dragover",
+            event => {
+
+                event.preventDefault();
+
+            }
+        );
+
+
+        bank.addEventListener(
+            "drop",
+            event => {
+
+                event.preventDefault();
+
+                const tileId =
+                    event
+                        .dataTransfer
+                        .getData(
+                            "text/plain"
+                        );
+
+                const tile =
+                    document
+                        .getElementById(
+                            tileId
+                        );
+
+                if (tile) {
+
+                    returnTileToBank(
+                        tile
+                    );
+
+                }
+
+            }
+        );
+
+
+        section.appendChild(
+            heading
+        );
+
+        section.appendChild(
+            bank
+        );
+
+        banksContainer.appendChild(
+            section
+        );
+
     });
-
-
-    /*
-      Allow tiles to be dragged back into the bank.
-    */
-
-    bank.addEventListener("dragover", e => {
-      e.preventDefault();
-    });
-
-    bank.addEventListener("drop", e => {
-
-      e.preventDefault();
-
-      const tileId = e.dataTransfer.getData("text/plain");
-      const tile = document.getElementById(tileId);
-
-      if (!tile) return;
-
-      returnTileToBank(tile);
-
-    });
-
-
-    section.appendChild(heading);
-    section.appendChild(bank);
-
-    banksContainer.appendChild(section);
-
-  });
 
 }
 
 
-/* ---------------------------------------------------------
-   PLACEMENT
-   --------------------------------------------------------- */
 
-function placeTile(tile, slot) {
+/* ======================================================
+   PLACE TILE
+====================================================== */
 
-  if (!tile || !slot) return;
+function placeTile(
+    tile,
+    slot
+) {
 
+    if (
+        !tile ||
+        !slot
+    ) {
 
-  /*
-    Category locking prevents an HOH tile from being
-    dropped into a Veto slot, etc.
-  */
-
-  if (tile.dataset.category !== slot.dataset.category) {
-    return;
-  }
-
-
-  /*
-    If slot already contains a tile,
-    send existing tile back to its bank.
-  */
-
-  const existing = slot.querySelector(".tile");
-
-  if (existing && existing !== tile) {
-    returnTileToBank(existing);
-  }
-
-
-  /*
-    If tile is currently in another slot,
-    clean up old slot.
-  */
-
-  const oldParent = tile.parentElement;
-
-  if (oldParent && oldParent.classList.contains("slot")) {
-
-    oldParent.classList.add("empty");
-    oldParent.classList.remove("correct", "incorrect");
-
-  }
-
-
-  slot.appendChild(tile);
-
-  slot.classList.remove(
-    "empty",
-    "correct",
-    "incorrect"
-  );
-
-  clearSelection();
-
-  updateStatus();
-
-}
-
-
-function returnTileToBank(tile) {
-
-  const category = tile.dataset.category;
-  const bank = document.getElementById("bank-" + category);
-
-  const oldSlot = tile.parentElement;
-
-  bank.appendChild(tile);
-
-  if (oldSlot && oldSlot.classList.contains("slot")) {
-
-    oldSlot.classList.add("empty");
-
-    oldSlot.classList.remove(
-      "correct",
-      "incorrect"
-    );
-
-  }
-
-  clearSelection();
-
-  updateStatus();
-
-}
-
-
-/* ---------------------------------------------------------
-   CHECK ANSWERS
-   --------------------------------------------------------- */
-
-function checkAnswers() {
-
-  const slots = document.querySelectorAll(".slot");
-
-  let correct = 0;
-
-  slots.forEach(slot => {
-
-    slot.classList.remove(
-      "correct",
-      "incorrect"
-    );
-
-    const tile = slot.querySelector(".tile");
-
-    if (!tile) return;
-
-
-    /*
-      THIS IS THE DUPLICATE-TILE MAGIC.
-
-      We compare the VALUE,
-      not the tile's unique ID.
-    */
-
-    if (tile.dataset.value === slot.dataset.answer) {
-
-      slot.classList.add("correct");
-      correct++;
-
-    } else {
-
-      slot.classList.add("incorrect");
+        return;
 
     }
 
-  });
 
-  updateStatus(correct);
+    /*
+        HOUSEGUESTS can only
+        enter HOUSEGUEST slots.
+
+        COMPETITIONS can only
+        enter COMPETITION slots.
+    */
+
+    if (
+        tile.dataset.type !==
+        slot.dataset.type
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+        If the destination
+        already contains a tile,
+        return that tile
+        to the bank.
+    */
+
+    const existing =
+        slot.querySelector(
+            ".tile"
+        );
+
+
+    if (
+        existing &&
+        existing !== tile
+    ) {
+
+        returnTileToBank(
+            existing
+        );
+
+    }
+
+
+    /*
+        If this tile came
+        from another slot,
+        reset that old slot.
+    */
+
+    const oldParent =
+        tile.parentElement;
+
+
+    if (
+        oldParent &&
+        oldParent.classList
+            .contains("slot")
+    ) {
+
+        oldParent.classList.add(
+            "empty"
+        );
+
+        oldParent.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+    }
+
+
+    slot.appendChild(
+        tile
+    );
+
+
+    slot.classList.remove(
+        "empty",
+        "correct",
+        "incorrect"
+    );
+
+
+    clearSelection();
+
+    updateStatus();
 
 }
 
 
-/* ---------------------------------------------------------
+
+/* ======================================================
+   RETURN TILE TO BANK
+====================================================== */
+
+function returnTileToBank(
+    tile
+) {
+
+    const type =
+        tile.dataset.type;
+
+
+    const bank =
+        document
+            .getElementById(
+                "bank-" +
+                type
+            );
+
+
+    const oldSlot =
+        tile.parentElement;
+
+
+    bank.appendChild(
+        tile
+    );
+
+
+    if (
+        oldSlot &&
+        oldSlot.classList
+            .contains("slot")
+    ) {
+
+        oldSlot.classList.add(
+            "empty"
+        );
+
+        oldSlot.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+    }
+
+
+    clearSelection();
+
+    updateStatus();
+
+}
+
+
+
+/* ======================================================
+   CHECK ANSWERS
+
+   IMPORTANT:
+
+   Correctness is determined by
+   the tile's TEXT VALUE.
+
+   NOT by its unique tile ID.
+
+   Therefore every duplicate
+   "Matt" tile is interchangeable.
+====================================================== */
+
+function checkAnswers() {
+
+    const slots =
+        document
+            .querySelectorAll(
+                ".slot"
+            );
+
+
+    let correct = 0;
+
+
+    slots.forEach(slot => {
+
+
+        slot.classList.remove(
+            "correct",
+            "incorrect"
+        );
+
+
+        const tile =
+            slot.querySelector(
+                ".tile"
+            );
+
+
+        if (!tile) {
+
+            return;
+
+        }
+
+
+        if (
+            tile.dataset.value ===
+            slot.dataset.answer
+        ) {
+
+            slot.classList.add(
+                "correct"
+            );
+
+            correct++;
+
+        }
+
+
+        else {
+
+            slot.classList.add(
+                "incorrect"
+            );
+
+        }
+
+    });
+
+
+    updateStatus(
+        correct
+    );
+
+}
+
+
+
+/* ======================================================
    STATUS
-   --------------------------------------------------------- */
+====================================================== */
 
-function updateStatus(forcedCorrect = null) {
+function updateStatus(
+    forcedCorrect = null
+) {
 
-  const slots = [...document.querySelectorAll(".slot")];
+    const slots =
+        [
+            ...document
+                .querySelectorAll(
+                    ".slot"
+                )
+        ];
 
-  let correct;
 
-  if (forcedCorrect !== null) {
+    let correct;
 
-    correct = forcedCorrect;
 
-  } else {
+    if (
+        forcedCorrect !== null
+    ) {
 
-    correct = slots.filter(slot => {
+        correct =
+            forcedCorrect;
 
-      const tile = slot.querySelector(".tile");
+    }
 
-      return (
-        tile &&
-        slot.classList.contains("correct")
-      );
 
-    }).length;
+    else {
 
-  }
+        correct =
+            slots.filter(
+                slot => {
 
-  const total = slots.length;
+                    const tile =
+                        slot
+                            .querySelector(
+                                ".tile"
+                            );
 
-  const status = document.getElementById("status");
+                    return (
+                        tile &&
+                        slot
+                            .classList
+                            .contains(
+                                "correct"
+                            )
+                    );
 
-  if (correct === total) {
+                }
+            ).length;
 
-    status.innerHTML =
-      "🔓 <strong>ALL " +
-      total +
-      " FILES DECLASSIFIED.</strong>";
+    }
 
-  } else {
 
-    status.innerHTML =
-      "<strong>" +
-      correct +
-      "</strong> of <strong>" +
-      total +
-      "</strong> files correctly declassified.";
+    const total =
+        slots.length;
 
-  }
+
+    const placed =
+        slots.filter(
+            slot =>
+                slot.querySelector(
+                    ".tile"
+                )
+        ).length;
+
+
+    if (
+        correct === total
+    ) {
+
+        status.innerHTML =
+            '<span class="complete">' +
+            '★ ALL ' +
+            total +
+            ' FILES DECLASSIFIED ★' +
+            '</span>';
+
+    }
+
+
+    else {
+
+        status.innerHTML =
+            "<strong>" +
+            placed +
+            "</strong>" +
+            " of " +
+            "<strong>" +
+            total +
+            "</strong>" +
+            " files placed";
+
+    }
 
 }
 
 
-/* ---------------------------------------------------------
-   SELECTION
-   --------------------------------------------------------- */
+
+/* ======================================================
+   CLEAR SELECTION
+====================================================== */
 
 function clearSelection() {
 
-  if (selectedTile) {
-    selectedTile.classList.remove("selected");
-  }
+    if (selectedTile) {
 
-  selectedTile = null;
+        selectedTile
+            .classList
+            .remove(
+                "selected"
+            );
+
+    }
+
+    selectedTile = null;
 
 }
 
 
-/* ---------------------------------------------------------
-   SHUFFLE REMAINING
-   --------------------------------------------------------- */
+
+/* ======================================================
+   SHUFFLE REMAINING TILES
+====================================================== */
 
 function shuffleRemaining() {
 
-  document.querySelectorAll(".bank").forEach(bank => {
+    document
+        .querySelectorAll(
+            ".bank"
+        )
+        .forEach(bank => {
 
-    const tiles = [...bank.children];
+            const tiles =
+                [
+                    ...bank.children
+                ];
 
-    shuffle(tiles).forEach(tile => {
-      bank.appendChild(tile);
-    });
+            shuffle(
+                tiles
+            )
+            .forEach(tile => {
 
-  });
+                bank.appendChild(
+                    tile
+                );
+
+            });
+
+        });
 
 }
 
 
-/* ---------------------------------------------------------
-   RESET
-   --------------------------------------------------------- */
+
+/* ======================================================
+   RESET BOARD
+====================================================== */
 
 function resetGame() {
 
-  document.querySelectorAll(".slot .tile").forEach(tile => {
+    document
+        .querySelectorAll(
+            ".slot .tile"
+        )
+        .forEach(tile => {
 
-    const category = tile.dataset.category;
+            const type =
+                tile.dataset.type;
+
+            document
+                .getElementById(
+                    "bank-" +
+                    type
+                )
+                .appendChild(
+                    tile
+                );
+
+        });
+
 
     document
-      .getElementById("bank-" + category)
-      .appendChild(tile);
+        .querySelectorAll(
+            ".slot"
+        )
+        .forEach(slot => {
 
-  });
+            slot.classList.add(
+                "empty"
+            );
+
+            slot.classList.remove(
+                "correct",
+                "incorrect"
+            );
+
+        });
 
 
-  document.querySelectorAll(".slot").forEach(slot => {
+    clearSelection();
 
-    slot.classList.add("empty");
+    shuffleRemaining();
 
-    slot.classList.remove(
-      "correct",
-      "incorrect"
-    );
-
-  });
-
-  clearSelection();
-
-  shuffleRemaining();
-
-  updateStatus();
+    updateStatus();
 
 }
 
 
-/* ---------------------------------------------------------
-   CONTROLS
-   --------------------------------------------------------- */
+
+/* ======================================================
+   BUTTONS
+====================================================== */
 
 document
-  .getElementById("checkBtn")
-  .addEventListener("click", checkAnswers);
+    .getElementById(
+        "checkBtn"
+    )
+    .addEventListener(
+        "click",
+        checkAnswers
+    );
+
 
 document
-  .getElementById("shuffleBtn")
-  .addEventListener("click", shuffleRemaining);
+    .getElementById(
+        "shuffleBtn"
+    )
+    .addEventListener(
+        "click",
+        shuffleRemaining
+    );
+
 
 document
-  .getElementById("resetBtn")
-  .addEventListener("click", resetGame);
+    .getElementById(
+        "resetBtn"
+    )
+    .addEventListener(
+        "click",
+        resetGame
+    );
 
 
-/* ---------------------------------------------------------
-   INITIALIZE
-   --------------------------------------------------------- */
+
+/* ======================================================
+   INITIALIZE GAME
+====================================================== */
 
 buildBoard();
+
 buildBanks();
+
 updateStatus();
+
 
 </script>
 
